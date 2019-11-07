@@ -34,6 +34,7 @@ Run under user:
         cmake build ..
         
 Run under admin:
+
         register_log.cmd
         create_service.cmd
         net start service_win
