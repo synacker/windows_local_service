@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<instrumentationManifest xsi:schemaLocation="http://schemas.microsoft.com/win/2004/08/events eventman.xsd" xmlns="http://schemas.microsoft.com/win/2004/08/events" xmlns:win="http://manifests.microsoft.com/win/2004/08/windows/events" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:trace="http://schemas.microsoft.com/win/2004/08/events/trace">
+	<instrumentation>
+		<events>
+			<provider name="service_win_log" guid="{3eeb9281-055b-47b2-ae22-06db7ce88746}" 
+					  symbol="SERVICE_WIN_LOG_PROVIDER" 
+					  resourceFileName="service_win.exe" 
+					  messageFileName="service_win.exe" 
+					  parameterFileName="service_win.exe">
+				<events>
+					<event symbol="SERVICE_LOG_FATAL" value="0" version="0" channel="Log" level="win:Error">
+					</event>
+					<event symbol="SERVICE_LOG_CRITICAL" value="1" version="0" channel="Log" level="win:Critical">
+					</event>
+					<event symbol="SERVICE_LOG_WARNING" value="2" version="0" channel="Log" level="win:Warning">
+					</event>
+					<event symbol="SERVICE_LOG_INFO" value="3" version="0" channel="Log" level="win:Informational">
+					</event>
+					<event symbol="SERVICE_LOG_DEBUG" value="4" version="0" channel="Log" level="win:Informational">
+					</event>
+					<event symbol="SERVICE_LOG_TRACE" value="5" version="0" channel="Log" level="win:Informational">
+					</event>
+					<event symbol="SERVICE_AUDIT_SUCCESS" value="6" version="0" channel="Audit" level="win:Informational">
+					</event>
+					<event symbol="SERVICE_AUDIT_FAILURE" value="7" version="0" channel="Audit" level="win:Error" keywords="win:AuditFailure ">
+					</event>
+				</events>
+				<levels>
+				</levels>
+				<channels>
+					<channel name="service_win_log/Log" chid="Log" symbol="SERVICE_LOG" type="Operational" enabled="true">
+					</channel>
+					<channel name="service_win_log/Audit" chid="Audit" symbol="SERVICE_AUDIT" type="Operational" enabled="true">
+					</channel>
+				</channels>
+				<keywords>
+				</keywords>
+			</provider>
+		</events>
+	</instrumentation>
+	<localization>
+		<resources culture="en-US">
+			<stringTable>
+			</stringTable>
+		</resources>
+	</localization>
+</instrumentationManifest>
