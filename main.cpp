@@ -55,11 +55,22 @@ void WINAPI ServiceMain(DWORD, LPTSTR[]) {
         updateStatus(SERVICE_RUNNING);
         while(!is_shutdown) {
             std::string log_message( "TEST SERVICE LOG" );
-            EVENT_DESCRIPTOR event_descriptor = SERVICE_LOG_WARNING;
             EVENT_DATA_DESCRIPTOR data;
             EventDataDescCreate( &data, log_message.c_str(), static_cast<ULONG>(log_message.size() + 1) );
-            EventWrite(log_handle, &event_descriptor, 1, &data);
-            Sleep(timeout);
+
+            if (EventWrite(log_handle, &SERVICE_LOG_FATAL, 1, &data) != ERROR_SUCCESS ||
+                EventWrite(log_handle, &SERVICE_LOG_CRITICAL, 1, &data) != ERROR_SUCCESS ||
+                EventWrite(log_handle, &SERVICE_LOG_WARNING, 1, &data) != ERROR_SUCCESS ||
+                EventWrite(log_handle, &SERVICE_LOG_INFO, 1, &data) != ERROR_SUCCESS ||
+                EventWrite(log_handle, &SERVICE_LOG_DEBUG, 1, &data) != ERROR_SUCCESS ||
+                EventWrite(log_handle, &SERVICE_LOG_TRACE, 1, &data) != ERROR_SUCCESS ||
+                EventWrite(log_handle, &SERVICE_AUDIT_SUCCESS, 1, &data) != ERROR_SUCCESS ||
+                EventWrite(log_handle, &SERVICE_AUDIT_FAILURE, 1, &data) != ERROR_SUCCESS)
+            {
+                is_shutdown = true;
+            } else {
+                Sleep(timeout);
+            }
             updateStatus(serviceStatus.dwCurrentState);
         }
     }
