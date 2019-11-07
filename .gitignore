@@ -10,3 +10,5 @@ manifestTEMP.BIN
 manifest.res
 
 manifest.rc
+
+build_dir/
