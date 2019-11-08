@@ -1,7 +1,7 @@
 Windows local service sample
 ==========================================================================================
 
-Sample windows of windows service run under local service account and with manifest for log.
+Sample windows of windows service run under [local service account](https://docs.microsoft.com/en-us/windows/win32/services/localservice-account) and with manifest for log.
 
 How to execute:
 =================
