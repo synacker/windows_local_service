@@ -7,6 +7,8 @@
 #include <shlobj.h>
 #include <winmeta.h>
 
+#include <locale>
+#include <codecvt>
 #include <string>
 #include <atomic>
 #include <mutex>
@@ -50,31 +52,34 @@ void WINAPI ServiceMain(DWORD, LPTSTR[]) {
 
     hServiceStatus = RegisterServiceCtrlHandler(serviceName, ServiceCtrlHandler);
 
+    EventRegisterservice_win_log();
+
+    std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
+    std::wstring log_data = converter.from_bytes("тест");
+
+    const auto log_data_pointer = log_data.c_str();
+
     REGHANDLE log_handle = NULL;
     if (EventRegister(&SERVICE_WIN_LOG_PROVIDER, NULL, NULL, &log_handle) == ERROR_SUCCESS) {
         updateStatus(SERVICE_RUNNING);
+        EventWriteSERVICE_ADMIN_START();
         while(!is_shutdown) {
-            std::string log_message( "TEST SERVICE LOG" );
-            EVENT_DATA_DESCRIPTOR data;
-            EventDataDescCreate( &data, log_message.c_str(), static_cast<ULONG>(log_message.size() + 1) );
 
-            if (EventWrite(log_handle, &SERVICE_LOG_FATAL, 1, &data) != ERROR_SUCCESS ||
-                EventWrite(log_handle, &SERVICE_LOG_CRITICAL, 1, &data) != ERROR_SUCCESS ||
-                EventWrite(log_handle, &SERVICE_LOG_WARNING, 1, &data) != ERROR_SUCCESS ||
-                EventWrite(log_handle, &SERVICE_LOG_INFO, 1, &data) != ERROR_SUCCESS ||
-                EventWrite(log_handle, &SERVICE_LOG_DEBUG, 1, &data) != ERROR_SUCCESS ||
-                EventWrite(log_handle, &SERVICE_LOG_TRACE, 1, &data) != ERROR_SUCCESS ||
-                EventWrite(log_handle, &SERVICE_AUDIT_SUCCESS, 1, &data) != ERROR_SUCCESS ||
-                EventWrite(log_handle, &SERVICE_AUDIT_FAILURE, 1, &data) != ERROR_SUCCESS)
-            {
-                is_shutdown = true;
-            } else {
-                Sleep(timeout);
-            }
+            EventWriteSERVICE_LOG_FATAL(log_data_pointer);
+            EventWriteSERVICE_LOG_CRITICAL(log_data_pointer);
+            EventWriteSERVICE_LOG_WARNING(log_data_pointer);
+            EventWriteSERVICE_LOG_INFO(log_data_pointer);
+            EventWriteSERVICE_LOG_DEBUG(log_data_pointer);
+            EventWriteSERVICE_AUDIT_SUCCESS(log_data_pointer);
+            EventWriteSERVICE_AUDIT_FAILURE(log_data_pointer);
+
+            Sleep(timeout);
             updateStatus(serviceStatus.dwCurrentState);
         }
+        EventWriteSERVICE_ADMIN_STOP();
     }
     updateStatus(SERVICE_STOPPED);
+    EventUnregisterservice_win_log();
 }
 
 

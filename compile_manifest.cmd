@@ -5,7 +5,7 @@ pushd "%~dp0"
 
 set manifest=manifest.man
 
-mc %manifest%
+mc -um %manifest%
 rc manifest.rc
 
 popd
