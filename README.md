@@ -14,6 +14,6 @@ Run under user:
 Run under admin:
 
         register_log.cmd
-        create_service.cmd
+        register_service.cmd
         net start service_win
 
